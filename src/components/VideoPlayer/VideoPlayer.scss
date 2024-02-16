@@ -1,0 +1,14 @@
+.video-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  &__video-el {
+    margin: 10px 0px;
+    min-height: 100px;
+    background-color: black;
+    width: 80%;
+    aspect-ratio: 16/9;
+  }
+}

@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 
-export const videoState = atom({
+export const videoState = atom<string>({
   key: "video",
-  default: 'vid/src'
+  default: ''
 });

@@ -1,4 +1,4 @@
-import { FC } from 'react'; 
+import { FC, ChangeEvent } from 'react'; 
 import Button from '@mui/material/Button';
 import UploadIcon from '@mui/icons-material/Upload';
 import { useRecoilState } from 'recoil';
@@ -11,7 +11,7 @@ export const UploadVideo:FC = ()=> {
   const navigate = useNavigate();
   const [,setVideoUrl] = useRecoilState(videoState);
 
-  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
         const reader = new FileReader();

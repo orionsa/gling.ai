@@ -11,4 +11,19 @@
     width: 80%;
     aspect-ratio: 16/9;
   }
+
+  &__bottom-panel {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__time {
+      display: flex;
+
+      span {
+        margin: 0 5px;
+      }
+    }
+  }
 }

@@ -42,7 +42,6 @@ export const VideoPlayer:FC = ()=> {
         className='video-player__video-el' 
         ref={videoRef} 
         onTimeUpdate={handleTimeUpdate}
-        // onLoad={handleVideoLoad}
         onLoadedData={handleVideoLoad}
       >
         <source src={src} type="video/mp4" />
@@ -52,8 +51,8 @@ export const VideoPlayer:FC = ()=> {
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
         <div className='video-player__bottom-panel__time'>
-          {/* <span>{dayjs.duration(duration, 'seconds').format('HH:mm:ss')}</span> */}
-          <FormatedTime seconds={currentTime}/> / 
+          <FormatedTime seconds={currentTime}/>
+          <span>/</span> 
           <FormatedTime seconds={duration} />
         </div>
       </div>

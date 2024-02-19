@@ -1,7 +1,6 @@
 import { FC, ChangeEvent, useState } from 'react'; 
 import Button from '@mui/material/Button';
 import UploadIcon from '@mui/icons-material/Upload';
-import { CircularProgress } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 

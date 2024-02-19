@@ -1,21 +1,26 @@
 import { FC, useRef, useState, SyntheticEvent } from 'react'
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { IconButton } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-import { videoState } from '../../store/video';
+import { videoState, clipsState, durationState, seekMapState, currentClipState } from '../../store/video';
 import { FormatedTime } from '../FormatedTime/FormatedTime';
+import { Timeline } from '../Timeline/Timeline';
+import { ActionsPanel } from '../ActionsPanel/ActionsPanel';
 import './VideoPlayer.scss';
 
 export const VideoPlayer:FC = ()=> {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const videoRef = useRef<HTMLVideoElement>(null)
+  let videoRef = useRef<HTMLVideoElement | null>(null)
   const src = useRecoilValue(videoState);
-  const [duration, setDuration] = useState<number>(0);
+  const [duration, setDuration] = useRecoilState(durationState);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [, setClips] = useRecoilState(clipsState);
+  const seekMap = useRecoilValue(seekMapState);
+  const [, setCurrentClip] = useRecoilState(currentClipState);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = (): void => {
     if (isPlaying) {
       videoRef.current?.pause();
       setIsPlaying(false);
@@ -26,14 +31,30 @@ export const VideoPlayer:FC = ()=> {
     setIsPlaying(true);
   }
 
-  const handleTimeUpdate = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const { currentTime } = event.currentTarget;
-    setCurrentTime(Math.round(currentTime));
+  const handleTimeUpdate = (event: SyntheticEvent<HTMLVideoElement>): void => {
+    const { currentTime: playerCurrentTime } = event.currentTarget;
+    const rounded = Math.round(playerCurrentTime);
+    if (rounded === currentTime) {
+      return;
+    }
+    setCurrentTime(rounded);
+    if (seekMap.has(rounded - 1)) {
+      setCurrentClip(prev => prev + 1);
+      handleSeek(seekMap.get(rounded - 1)!);
+    }
   }
 
-  const handleVideoLoad = (event: SyntheticEvent<HTMLVideoElement>) => {
+  const handleVideoLoad = (event: SyntheticEvent<HTMLVideoElement>): void => {
     const { duration } = event.currentTarget;
-    setDuration(Math.round(duration));
+    const rounded = Math.round(duration); 
+    setDuration(rounded);
+    setClips([[0, rounded]])
+  }
+
+  const handleSeek = (second:number): void => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = second;
+    }
   }
 
   return (
@@ -56,6 +77,8 @@ export const VideoPlayer:FC = ()=> {
           <FormatedTime seconds={duration} />
         </div>
       </div>
+      <ActionsPanel actions={['seek', 'cut', 'add breakpoint']} />
+      <Timeline currentTime={currentTime} onSeek={handleSeek}/>
     </div>
   )
 }

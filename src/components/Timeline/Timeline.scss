@@ -1,0 +1,20 @@
+.timeline {
+  width: 100%;
+  overflow-y: scroll;
+
+  &__clips {
+    height: 50px;
+    background-color: rgb(163, 163, 191);
+    display: flex;
+    align-items: center;
+    position: relative;
+  
+    &__current-time {
+      height: 100%;
+      width: 2px;
+      background-color: red;
+      position: absolute;
+    }
+  }
+
+}

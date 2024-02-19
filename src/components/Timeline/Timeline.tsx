@@ -54,6 +54,10 @@ export const Timeline:FC<TimelineProps> = ({ currentTime, onSeek }) => {
   }
 
   const removeClip = (index: number): void => {
+    if (clips.length === 1) {
+      return;
+    }
+    
     const currentClip = clips[index];
     setClips(prev => prev.toSpliced(index, 1));
     setDuration(prev => prev - (currentClip[1] - currentClip[0]))

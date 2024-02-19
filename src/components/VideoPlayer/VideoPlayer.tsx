@@ -8,6 +8,7 @@ import { videoState, clipsState, durationState, seekMapState, currentClipState }
 import { FormatedTime } from '../FormatedTime/FormatedTime';
 import { Timeline } from '../Timeline/Timeline';
 import { ActionsPanel } from '../ActionsPanel/ActionsPanel';
+import { PageLoading } from '../PageLoading/PageLoading'; 
 import './VideoPlayer.scss';
 
 export const VideoPlayer:FC = ()=> {
@@ -16,9 +17,10 @@ export const VideoPlayer:FC = ()=> {
   const src = useRecoilValue(videoState);
   const [duration, setDuration] = useRecoilState(durationState);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [, setClips] = useRecoilState(clipsState);
+  const [clips, setClips] = useRecoilState(clipsState);
   const seekMap = useRecoilValue(seekMapState);
   const [, setCurrentClip] = useRecoilState(currentClipState);
+  const [isLoading, setLoader] = useState(true);
 
   const handlePlayPause = (): void => {
     if (isPlaying) {
@@ -37,9 +39,15 @@ export const VideoPlayer:FC = ()=> {
     if (rounded === currentTime) {
       return;
     }
+
     setCurrentTime(rounded);
     if (seekMap.has(rounded - 1)) {
-      setCurrentClip(prev => prev + 1);
+      if (clips.length > 1) {
+        setCurrentClip(prev => {
+          console.log('is this the bug?')
+          return prev + 1});
+      }
+
       handleSeek(seekMap.get(rounded - 1)!);
     }
   }
@@ -48,7 +56,8 @@ export const VideoPlayer:FC = ()=> {
     const { duration } = event.currentTarget;
     const rounded = Math.round(duration); 
     setDuration(rounded);
-    setClips([[0, rounded]])
+    setClips([[0, rounded]]);
+    setLoader(false);
   }
 
   const handleSeek = (second:number): void => {
@@ -79,6 +88,7 @@ export const VideoPlayer:FC = ()=> {
       </div>
       <ActionsPanel actions={['seek', 'cut', 'add breakpoint']} />
       <Timeline currentTime={currentTime} onSeek={handleSeek}/>
+      <PageLoading isLoading={isLoading} />
     </div>
   )
 }

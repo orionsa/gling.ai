@@ -1,7 +1,7 @@
 .app {
   height: 100vh;
   width: 100vw;
-  background-color: rgb(213, 213, 213);
+  background-color: var(--main-bg-color);
   display: grid;
   grid-template-rows: 50px auto;
 }

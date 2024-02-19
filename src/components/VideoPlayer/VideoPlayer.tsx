@@ -39,15 +39,9 @@ export const VideoPlayer:FC = ()=> {
     if (rounded === currentTime) {
       return;
     }
-
     setCurrentTime(rounded);
     if (seekMap.has(rounded - 1)) {
-      if (clips.length > 1) {
-        setCurrentClip(prev => {
-          console.log('is this the bug?')
-          return prev + 1});
-      }
-
+      setCurrentClip(prev => prev + 1);
       handleSeek(seekMap.get(rounded - 1)!);
     }
   }
